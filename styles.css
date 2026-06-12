@@ -11,10 +11,9 @@
   --blue-dark: #074d7d;
   --muted: #5f6067;
   --danger: #b83232;
-  --shadow: 7px 8px 0 var(--ink);
+  --shadow: 6px 7px 0 var(--ink);
   --radius: 10px;
-  --cursor: url("assets/cursor.svg") 5 3, auto;
-  --cursor-pointer: url("assets/cursor-pointer.svg") 5 3, pointer;
+  --cursor-pointer: url("assets/cursor-pointer.svg") 4 3, pointer;
 }
 
 * {
@@ -23,7 +22,6 @@
 
 html {
   min-width: 320px;
-  cursor: var(--cursor);
 }
 
 body {
@@ -40,7 +38,6 @@ body {
     radial-gradient(circle at 88% 18%, rgba(255, 190, 11, 0.26) 0 84px, transparent 85px),
     linear-gradient(135deg, #fff9e8 0%, var(--paper) 47%, #d8efff 100%);
   background-size: 30px 30px, 30px 30px, auto, auto, auto;
-  cursor: var(--cursor);
 }
 
 body::before {
@@ -93,55 +90,25 @@ button:focus-visible,
   position: relative;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(260px, 1fr);
   gap: 18px;
-  align-items: end;
-  padding: clamp(16px, 3vw, 28px);
+  align-items: center;
+  padding: clamp(14px, 2.3vw, 22px);
   border: 5px solid var(--ink);
   border-radius: var(--radius);
   background:
-    linear-gradient(120deg, rgba(25, 200, 194, 0.18), transparent 34%),
-    radial-gradient(circle at 11% 22%, var(--teal) 0 7px, transparent 8px),
-    radial-gradient(circle at 92% 18%, var(--yellow) 0 7px, transparent 8px),
+    linear-gradient(120deg, rgba(25, 200, 194, 0.14), transparent 38%),
+    radial-gradient(circle at 96% 24%, var(--yellow) 0 6px, transparent 7px),
     linear-gradient(180deg, #fffdf3, #fff0c2);
   box-shadow: var(--shadow);
 }
 
-.spark-strip {
-  position: absolute;
-  inset: 16px 18px auto auto;
-  display: flex;
-  gap: 16px;
-  pointer-events: none;
-}
-
-.spark-strip span {
-  width: 18px;
-  height: 18px;
-  border: 4px solid var(--ink);
-  background: var(--yellow);
-  transform: rotate(45deg);
-}
-
-.spark-strip span:nth-child(2) {
-  width: 10px;
-  height: 10px;
-  margin-top: 20px;
-  border-radius: 999px;
-  background: var(--teal);
-}
-
-.spark-strip span:nth-child(3) {
-  width: 26px;
-  height: 8px;
-  margin-top: 4px;
-  border-radius: 999px;
-  transform: rotate(-12deg);
-  background: var(--ink);
-}
-
 .brand-block {
   min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
 }
 
 .eyebrow,
@@ -156,19 +123,23 @@ button:focus-visible,
 
 .brand-logo {
   width: fit-content;
-  margin: 14px 0 0;
-  color: #fff8df;
-  font-family: "Luckiest Guy", Impact, "Arial Black", sans-serif;
-  font-size: clamp(4rem, 12vw, 9rem);
-  font-weight: 400;
-  line-height: 0.82;
+  margin: 0;
+  border: 4px solid var(--ink);
+  border-radius: 14px;
+  padding: 6px 14px 2px;
+  background: #fff8df;
+  color: var(--ink);
+  font-family: "Baloo 2", "Nunito", system-ui, sans-serif;
+  font-size: clamp(2.7rem, 7vw, 5.6rem);
+  font-weight: 800;
+  line-height: 0.9;
   letter-spacing: 0;
   text-transform: uppercase;
-  -webkit-text-stroke: clamp(3px, 0.45vw, 7px) var(--ink);
   text-shadow:
-    0.05em 0.07em 0 var(--yellow),
-    0.085em 0.105em 0 var(--ink);
-  transform: rotate(-1.5deg);
+    0.045em 0.055em 0 var(--yellow),
+    0.07em 0.08em 0 rgba(6, 9, 12, 0.16);
+  box-shadow: 5px 6px 0 var(--ink);
+  transform: rotate(-1deg);
   overflow-wrap: normal;
   word-break: normal;
 }
@@ -177,6 +148,7 @@ button:focus-visible,
   display: flex;
   flex-wrap: wrap;
   justify-content: end;
+  align-items: center;
   gap: 10px;
 }
 
@@ -272,10 +244,10 @@ p {
 
 h2 {
   margin: 2px 0 0;
-  font-family: "Luckiest Guy", Impact, "Arial Black", sans-serif;
-  font-size: clamp(1.9rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 0.9;
+  font-family: "Baloo 2", "Nunito", system-ui, sans-serif;
+  font-size: clamp(1.85rem, 3.3vw, 2.8rem);
+  font-weight: 800;
+  line-height: 0.95;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -608,6 +580,11 @@ body.is-uploading .progress-fill {
     grid-template-columns: 1fr;
   }
 
+  .brand-block {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .status-row {
     justify-content: start;
   }
@@ -638,13 +615,9 @@ body.is-uploading .progress-fill {
     padding: 16px;
   }
 
-  .spark-strip {
-    display: none;
-  }
-
   .brand-logo {
-    font-size: clamp(3.45rem, 18vw, 5.4rem);
-    -webkit-text-stroke: 3px var(--ink);
+    font-size: clamp(2.55rem, 15vw, 4.8rem);
+    padding: 5px 10px 1px;
   }
 
   .panel-heading {
