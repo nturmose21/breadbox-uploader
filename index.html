@@ -7,99 +7,82 @@
     <meta name="description" content="Flash BREADBOX Arduino UNO projects from Chrome or Edge using Web Serial.">
     <meta property="og:title" content="BREADBOX Arduino UNO Uploader">
     <meta property="og:description" content="Pick a BREADBOX sketch and upload it straight to an Arduino UNO.">
-    <meta property="og:image" content="assets/breadbox-theme.png">
     <meta name="theme-color" content="#10bdb8">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="page-shell">
-      <section class="launch" aria-labelledby="app-title">
-        <div class="brand-rail" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+      <header class="site-header" aria-labelledby="app-title">
+        <div class="brand-block">
+          <p class="eyebrow">Arduino starter kit</p>
+          <h1 class="brand-logo" id="app-title">BREADBOX</h1>
         </div>
+        <div class="status-row" aria-label="Uploader status">
+          <div class="browser-pill" id="browser-status">Checking browser</div>
+          <div class="count-pill" id="sketch-count">0 sketches</div>
+        </div>
+      </header>
 
-        <header class="hero">
-          <div class="hero-copy">
-            <p class="eyebrow">BREADBOX Arduino starter kit</p>
-            <h1 id="app-title">Flash your UNO</h1>
-            <div class="status-row">
-              <div class="browser-pill" id="browser-status">Checking browser</div>
-              <div class="count-pill" id="sketch-count">0 sketches</div>
+      <section class="uploader-grid">
+        <section class="panel project-panel" aria-label="Sketch list">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Step 1</p>
+              <h2>Pick a project</h2>
+            </div>
+            <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh firmware list" title="Refresh firmware list">
+              <span aria-hidden="true">R</span>
+            </button>
+          </div>
+          <div class="sketch-list" id="sketch-list"></div>
+        </section>
+
+        <section class="panel upload-panel" aria-label="Uploader">
+          <div class="panel-heading upload-heading">
+            <div>
+              <p class="panel-kicker">Step 2</p>
+              <h2>Upload</h2>
+            </div>
+            <label class="file-control">
+              <span>Custom HEX</span>
+              <input id="hex-file" type="file" accept=".hex,text/plain">
+            </label>
+          </div>
+
+          <div class="selected">
+            <p class="panel-kicker">Selected</p>
+            <h3 id="selected-name">No sketch selected</h3>
+            <p id="selected-detail">Choose a BREADBOX sketch.</p>
+          </div>
+
+          <button class="primary" id="upload-button" type="button" disabled>
+            <span aria-hidden="true">&gt;</span>
+            Upload to UNO
+          </button>
+
+          <div class="progress-wrap" aria-label="Upload progress">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-meta">
+              <span id="progress-label">Idle</span>
+              <span id="progress-percent">0%</span>
             </div>
           </div>
-          <figure class="theme-art">
-            <img src="assets/breadbox-theme.png" alt="BREADBOX Arduino starter kit artwork">
-          </figure>
-        </header>
 
-        <div class="app-grid">
-          <section class="panel picker" aria-label="Sketch list">
-            <div class="panel-heading">
-              <div>
-                <p class="panel-kicker">Choose firmware</p>
-                <h2>Projects</h2>
-              </div>
-              <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh firmware list" title="Refresh firmware list">
-                <span aria-hidden="true">R</span>
-              </button>
+          <div class="console-frame">
+            <div class="console-tabs" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
-            <div class="sketch-list" id="sketch-list"></div>
-          </section>
-
-          <section class="panel action" aria-label="Uploader">
-            <div class="selected">
-              <p class="panel-kicker">Ready to flash</p>
-              <h2 id="selected-name">No sketch selected</h2>
-              <p id="selected-detail">Choose a BREADBOX sketch.</p>
-            </div>
-
-            <div class="upload-strip">
-              <button class="primary" id="upload-button" type="button" disabled>
-                <span aria-hidden="true">&gt;</span>
-                Upload to UNO
-              </button>
-              <label class="file-control">
-                <span>Custom HEX</span>
-                <input id="hex-file" type="file" accept=".hex,text/plain">
-              </label>
-            </div>
-
-            <div class="progress-wrap" aria-label="Upload progress">
-              <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-              </div>
-              <div class="progress-meta">
-                <span id="progress-label">Idle</span>
-                <span id="progress-percent">0%</span>
-              </div>
-            </div>
-
-            <div class="console-frame">
-              <div class="console-tabs" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <pre class="log" id="log" aria-live="polite"></pre>
-            </div>
-          </section>
-
-          <aside class="blueprint" aria-label="BREADBOX checklist">
-            <div>
-              <p class="panel-kicker">Kit standard</p>
-              <h2>UNO plus mini breadboard</h2>
-            </div>
-            <ul>
-              <li><span aria-hidden="true">01</span> Chrome or Edge</li>
-              <li><span aria-hidden="true">02</span> USB cable connected</li>
-              <li><span aria-hidden="true">03</span> BREADBOX circuit built</li>
-            </ul>
-          </aside>
-        </div>
+            <pre class="log" id="log" aria-live="polite"></pre>
+          </div>
+        </section>
       </section>
     </main>
     <noscript>
