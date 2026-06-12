@@ -11,10 +11,10 @@
   --blue-dark: #074d7d;
   --muted: #5f6067;
   --danger: #b83232;
-  --line: #06090c;
   --shadow: 7px 8px 0 var(--ink);
   --radius: 10px;
   --cursor: url("assets/cursor.svg") 5 3, auto;
+  --cursor-pointer: url("assets/cursor-pointer.svg") 5 3, pointer;
 }
 
 * {
@@ -36,8 +36,10 @@ body {
   background:
     linear-gradient(rgba(6, 9, 12, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(6, 9, 12, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 12% 14%, rgba(25, 200, 194, 0.22) 0 90px, transparent 91px),
+    radial-gradient(circle at 88% 18%, rgba(255, 190, 11, 0.26) 0 84px, transparent 85px),
     linear-gradient(135deg, #fff9e8 0%, var(--paper) 47%, #d8efff 100%);
-  background-size: 30px 30px, 30px 30px, auto;
+  background-size: 30px 30px, 30px 30px, auto, auto, auto;
   cursor: var(--cursor);
 }
 
@@ -65,7 +67,14 @@ input {
 button,
 label,
 .sketch-button {
-  cursor: var(--cursor);
+  cursor: var(--cursor-pointer);
+}
+
+button:focus-visible,
+.file-control:focus-within,
+.sketch-button:focus-visible {
+  outline: 4px solid var(--orange);
+  outline-offset: 4px;
 }
 
 .page-shell {
@@ -81,6 +90,8 @@ label,
 }
 
 .site-header {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 18px;
@@ -89,10 +100,44 @@ label,
   border: 5px solid var(--ink);
   border-radius: var(--radius);
   background:
+    linear-gradient(120deg, rgba(25, 200, 194, 0.18), transparent 34%),
     radial-gradient(circle at 11% 22%, var(--teal) 0 7px, transparent 8px),
-    radial-gradient(circle at 88% 20%, var(--yellow) 0 7px, transparent 8px),
+    radial-gradient(circle at 92% 18%, var(--yellow) 0 7px, transparent 8px),
     linear-gradient(180deg, #fffdf3, #fff0c2);
   box-shadow: var(--shadow);
+}
+
+.spark-strip {
+  position: absolute;
+  inset: 16px 18px auto auto;
+  display: flex;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.spark-strip span {
+  width: 18px;
+  height: 18px;
+  border: 4px solid var(--ink);
+  background: var(--yellow);
+  transform: rotate(45deg);
+}
+
+.spark-strip span:nth-child(2) {
+  width: 10px;
+  height: 10px;
+  margin-top: 20px;
+  border-radius: 999px;
+  background: var(--teal);
+}
+
+.spark-strip span:nth-child(3) {
+  width: 26px;
+  height: 8px;
+  margin-top: 4px;
+  border-radius: 999px;
+  transform: rotate(-12deg);
+  background: var(--ink);
 }
 
 .brand-block {
@@ -122,8 +167,8 @@ label,
   -webkit-text-stroke: clamp(3px, 0.45vw, 7px) var(--ink);
   text-shadow:
     0.05em 0.07em 0 var(--yellow),
-    0.09em 0.11em 0 var(--ink);
-  transform: rotate(-2deg);
+    0.085em 0.105em 0 var(--ink);
+  transform: rotate(-1.5deg);
   overflow-wrap: normal;
   word-break: normal;
 }
@@ -168,7 +213,7 @@ label,
 
 .uploader-grid {
   display: grid;
-  grid-template-columns: minmax(300px, 0.86fr) minmax(420px, 1.14fr);
+  grid-template-columns: minmax(320px, 0.86fr) minmax(430px, 1.14fr);
   gap: 18px;
   align-items: stretch;
 }
@@ -184,7 +229,7 @@ label,
 
 .project-panel,
 .upload-panel {
-  min-height: 620px;
+  min-height: 600px;
 }
 
 .project-panel {
@@ -199,11 +244,19 @@ label,
   gap: 12px;
   padding: 16px;
   border-bottom: 5px solid var(--ink);
-  background: var(--teal);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+    var(--teal);
+  background-size: 18px 18px;
 }
 
 .upload-heading {
-  background: var(--blue);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    var(--blue);
+  background-size: 18px 18px;
   color: #fff;
 }
 
@@ -243,6 +296,7 @@ h3 {
   border-radius: 9px;
   background: var(--yellow);
   color: var(--ink);
+  font-size: 1.2rem;
   font-weight: 900;
   box-shadow: 3px 4px 0 var(--ink);
 }
@@ -264,6 +318,24 @@ h3 {
   gap: 10px;
   padding: 14px;
   overflow: auto;
+  scrollbar-color: var(--teal-dark) #fff4d7;
+}
+
+.sketch-list::-webkit-scrollbar,
+.log::-webkit-scrollbar {
+  width: 14px;
+}
+
+.sketch-list::-webkit-scrollbar-track,
+.log::-webkit-scrollbar-track {
+  background: #fff4d7;
+}
+
+.sketch-list::-webkit-scrollbar-thumb,
+.log::-webkit-scrollbar-thumb {
+  border: 3px solid #fff4d7;
+  border-radius: 999px;
+  background: var(--teal-dark);
 }
 
 .sketch-button {
@@ -276,11 +348,12 @@ h3 {
   color: var(--ink);
   text-align: left;
   box-shadow: 3px 4px 0 rgba(6, 9, 12, 0.95);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .sketch-button:hover,
 .sketch-button.active {
-  background: var(--yellow);
+  background: linear-gradient(135deg, #ffe27b, var(--yellow));
 }
 
 .sketch-button.active {
@@ -322,6 +395,7 @@ h3 {
   border: 4px solid var(--ink);
   border-radius: 9px;
   background:
+    radial-gradient(circle at 100% 0%, rgba(25, 200, 194, 0.24) 0 84px, transparent 85px),
     linear-gradient(135deg, #fff 0%, #fff1bd 100%);
 }
 
@@ -330,6 +404,23 @@ h3 {
   color: #33353b;
   font-size: 1rem;
   font-weight: 800;
+}
+
+.selected-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.selected-badges span {
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .primary,
@@ -344,11 +435,12 @@ h3 {
   font-weight: 900;
   text-transform: uppercase;
   box-shadow: 4px 5px 0 var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .primary {
   margin: 0 18px 18px;
-  background: var(--teal);
+  background: linear-gradient(135deg, #66dfd9, var(--teal));
   color: var(--ink);
 }
 
@@ -359,7 +451,7 @@ h3 {
   box-shadow: 4px 5px 0 var(--ink);
 }
 
-.primary span {
+.primary .button-icon {
   width: 28px;
   height: 28px;
   display: inline-flex;
@@ -368,6 +460,10 @@ h3 {
   border: 3px solid var(--ink);
   border-radius: 999px;
   background: var(--yellow);
+}
+
+body.is-uploading .primary .button-icon {
+  animation: pulse-dot 780ms ease-in-out infinite alternate;
 }
 
 .file-control {
@@ -408,6 +504,11 @@ h3 {
   transition: width 160ms ease;
 }
 
+body.is-uploading .progress-fill {
+  animation: belt 700ms linear infinite;
+  background-size: 34px 34px;
+}
+
 .progress-meta {
   display: flex;
   justify-content: space-between;
@@ -427,6 +528,7 @@ h3 {
   border-radius: 9px;
   overflow: hidden;
   background: #071014;
+  box-shadow: inset 0 0 0 2px rgba(156, 248, 243, 0.08);
 }
 
 .console-tabs {
@@ -478,6 +580,24 @@ h3 {
   font-weight: 900;
 }
 
+@keyframes pulse-dot {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes belt {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 34px 0;
+  }
+}
+
 @media (max-width: 900px) {
   body::before {
     display: none;
@@ -518,6 +638,10 @@ h3 {
     padding: 16px;
   }
 
+  .spark-strip {
+    display: none;
+  }
+
   .brand-logo {
     font-size: clamp(3.45rem, 18vw, 5.4rem);
     -webkit-text-stroke: 3px var(--ink);
@@ -534,6 +658,10 @@ h3 {
 
   .file-control {
     width: 100%;
+  }
+
+  .sketch-list {
+    max-height: 360px;
   }
 
   .selected,

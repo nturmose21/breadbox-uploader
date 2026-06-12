@@ -13,12 +13,14 @@ const els = {
   progressFill: document.querySelector("#progress-fill"),
   progressLabel: document.querySelector("#progress-label"),
   progressPercent: document.querySelector("#progress-percent"),
+  uploadButtonLabel: document.querySelector("#upload-button-label"),
   log: document.querySelector("#log"),
 };
 
 let sketches = [];
 let selectedSketch = null;
 let customHex = null;
+let isUploading = false;
 
 init();
 
@@ -45,13 +47,14 @@ function updateBrowserStatus() {
 async function loadManifest() {
   setProgress(0, "Loading firmware list");
   try {
+    const previousId = customHex ? null : selectedSketch?.id;
     const response = await fetch(`${MANIFEST_URL}?t=${Date.now()}`);
     if (!response.ok) {
       throw new Error(`Manifest request failed: ${response.status}`);
     }
     const manifest = await response.json();
     sketches = manifest.sketches || [];
-    selectedSketch = sketches[0] || null;
+    selectedSketch = sketches.find((sketch) => sketch.id === previousId) || sketches[0] || null;
     customHex = null;
     renderSketches();
     renderSelected();
@@ -104,7 +107,7 @@ function renderSelected() {
   if (customHex) {
     els.selectedName.textContent = customHex.name;
     els.selectedDetail.textContent = "Custom Intel HEX file";
-    els.uploadButton.disabled = !("serial" in navigator);
+    els.uploadButton.disabled = isUploading || !("serial" in navigator);
     return;
   }
 
@@ -117,7 +120,7 @@ function renderSelected() {
 
   els.selectedName.textContent = selectedSketch.name;
   els.selectedDetail.textContent = selectedSketch.hardware || "Arduino UNO";
-  els.uploadButton.disabled = !("serial" in navigator);
+  els.uploadButton.disabled = isUploading || !("serial" in navigator);
 }
 
 async function loadCustomHex(event) {
@@ -137,12 +140,16 @@ async function loadCustomHex(event) {
 }
 
 async function uploadSelected() {
+  if (isUploading) {
+    return;
+  }
+
   if (!("serial" in navigator)) {
     writeLog("Web Serial is not available in this browser.");
     return;
   }
 
-  els.uploadButton.disabled = true;
+  setUploading(true);
 
   try {
     const hexText = customHex?.text || await fetchFirmware(selectedSketch);
@@ -150,15 +157,7 @@ async function uploadSelected() {
     writeLog(`Firmware size: ${firmware.length.toLocaleString()} bytes.`);
     setProgress(0, "Waiting for board");
 
-    const port = await navigator.serial.requestPort({
-      filters: [
-        { usbVendorId: 0x2341 },
-        { usbVendorId: 0x2a03 },
-        { usbVendorId: 0x1a86 },
-        { usbVendorId: 0x0403 },
-        { usbVendorId: 0x10c4 },
-      ],
-    });
+    const port = await navigator.serial.requestPort();
 
     const uploader = new UnoUploader(port, (progress) => {
       setProgress(progress.percent, progress.label);
@@ -171,8 +170,17 @@ async function uploadSelected() {
     setProgress(0, "Upload stopped");
     writeLog(error.message);
   } finally {
-    els.uploadButton.disabled = !("serial" in navigator);
+    setUploading(false);
+    renderSelected();
   }
+}
+
+function setUploading(uploading) {
+  isUploading = uploading;
+  document.body.classList.toggle("is-uploading", uploading);
+  els.uploadButton.disabled = uploading || !("serial" in navigator);
+  els.uploadButton.setAttribute("aria-busy", String(uploading));
+  els.uploadButtonLabel.textContent = uploading ? "Uploading" : "Upload to UNO";
 }
 
 async function fetchFirmware(sketch) {
@@ -267,6 +275,7 @@ class UnoUploader {
     this.onProgress = onProgress;
     this.reader = null;
     this.writer = null;
+    this.rxBuffer = [];
   }
 
   async upload(firmware) {
@@ -332,8 +341,8 @@ class UnoUploader {
   }
 
   async readBytes(length, timeout) {
-    const out = [];
     const deadline = Date.now() + timeout;
+    const out = this.rxBuffer.splice(0, length);
 
     while (out.length < length) {
       const remaining = deadline - Date.now();
@@ -354,6 +363,10 @@ class UnoUploader {
       }
 
       out.push(...result.value);
+    }
+
+    if (out.length > length) {
+      this.rxBuffer.unshift(...out.slice(length));
     }
 
     return out.slice(0, length);

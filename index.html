@@ -17,6 +17,11 @@
   <body>
     <main class="page-shell">
       <header class="site-header" aria-labelledby="app-title">
+        <div class="spark-strip" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <div class="brand-block">
           <p class="eyebrow">Arduino starter kit</p>
           <h1 class="brand-logo" id="app-title">BREADBOX</h1>
@@ -35,7 +40,7 @@
               <h2>Pick a project</h2>
             </div>
             <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh firmware list" title="Refresh firmware list">
-              <span aria-hidden="true">R</span>
+              <span aria-hidden="true">↻</span>
             </button>
           </div>
           <div class="sketch-list" id="sketch-list"></div>
@@ -57,11 +62,16 @@
             <p class="panel-kicker">Selected</p>
             <h3 id="selected-name">No sketch selected</h3>
             <p id="selected-detail">Choose a BREADBOX sketch.</p>
+            <div class="selected-badges" aria-hidden="true">
+              <span>UNO</span>
+              <span>USB</span>
+              <span>HEX</span>
+            </div>
           </div>
 
           <button class="primary" id="upload-button" type="button" disabled>
-            <span aria-hidden="true">&gt;</span>
-            Upload to UNO
+            <span class="button-icon" aria-hidden="true">&gt;</span>
+            <span id="upload-button-label">Upload to UNO</span>
           </button>
 
           <div class="progress-wrap" aria-label="Upload progress">
