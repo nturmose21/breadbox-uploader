@@ -7,7 +7,12 @@
       "summary": "OLED game with three-button control.",
       "hardware": "Arduino UNO, SSD1306 OLED, buttons on D9/D10/D11",
       "source": "../Arduino-Games-main/Flappy-Bird/Flappybird-hack_updt.ino",
-      "hex": "firmware/flappy-bird.hex"
+      "hex": "firmware/flappy-bird.hex",
+      "screen": {
+        "title": "FLAPPYBIRD",
+        "subtitle": "PRESS TO START",
+        "mode": "bird"
+      }
     },
     {
       "id": "tetris",
@@ -15,7 +20,12 @@
       "summary": "OLED Tetris with buzzer audio.",
       "hardware": "Arduino UNO, SSD1306 OLED, buttons on D9/D10/D11, buzzer on D12",
       "source": "../Arduino-Games-main/Tetris/Tetris-hack_updt.ino",
-      "hex": "firmware/tetris.hex"
+      "hex": "firmware/tetris.hex",
+      "screen": {
+        "title": "TETRIS",
+        "subtitle": "Korobeiniki ready",
+        "mode": "blocks"
+      }
     },
     {
       "id": "tiny-tetris",
@@ -23,7 +33,12 @@
       "summary": "Compact OLED Tetris sketch.",
       "hardware": "Arduino UNO and I2C OLED",
       "source": "../arduino-Tiny-Tetris-main/Tiny_Tetris.ino",
-      "hex": "firmware/tiny-tetris.hex"
+      "hex": "firmware/tiny-tetris.hex",
+      "screen": {
+        "title": "TINY TETRIS",
+        "subtitle": "Title screen",
+        "mode": "blocks"
+      }
     },
     {
       "id": "doom",
@@ -31,7 +46,12 @@
       "summary": "OLED raycast game for UNO-class boards.",
       "hardware": "Arduino UNO, SSD1306 OLED, buttons, optional buzzer",
       "source": "../Doom/Doom.ino",
-      "hex": "firmware/doom.hex"
+      "hex": "firmware/doom.hex",
+      "screen": {
+        "title": "DOOM",
+        "subtitle": "PRESS FIRE",
+        "mode": "doom"
+      }
     },
     {
       "id": "mini-pc",
@@ -39,7 +59,12 @@
       "summary": "Calculator, game, stopwatch, calendar, phonebook.",
       "hardware": "Arduino UNO, SSD1306 OLED, buttons on D4/D5/D6, potentiometer on A0, buzzer on D9",
       "source": "../Mini-PC-Arduino-main/OledPC.ino",
-      "hex": "firmware/mini-pc.hex"
+      "hex": "firmware/mini-pc.hex",
+      "screen": {
+        "title": "HACK_UPDT",
+        "subtitle": "Calculator Menu",
+        "mode": "menu"
+      }
     },
     {
       "id": "calculator",
@@ -47,7 +72,12 @@
       "summary": "OLED Ardulator calculator.",
       "hardware": "Arduino UNO and SSD1306 OLED",
       "source": "../Arduino-Uno-calculator--main/ardulator/Ardulator.ino",
-      "hex": "firmware/calculator.hex"
+      "hex": "firmware/calculator.hex",
+      "screen": {
+        "title": "ARDULATOR",
+        "subtitle": "Cover screen",
+        "mode": "calc"
+      }
     },
     {
       "id": "multimeter-oscilloscope",
@@ -55,7 +85,12 @@
       "summary": "OLED meter and signal tool.",
       "hardware": "Arduino UNO and SSD1306 OLED",
       "source": "../Multimeter-oscilloscope-main/hack_updt_multimeter_multitool.ino",
-      "hex": "firmware/multimeter-oscilloscope.hex"
+      "hex": "firmware/multimeter-oscilloscope.hex",
+      "screen": {
+        "title": "METER",
+        "subtitle": "VOL RES CNT",
+        "mode": "meter"
+      }
     },
     {
       "id": "dino-tamagotchi",
@@ -63,7 +98,12 @@
       "summary": "OLED virtual pet sketch.",
       "hardware": "Arduino UNO and SSD1306 OLED",
       "source": "../Dino-Tamagotchi-main/Tamaguino_DINO.ino",
-      "hex": "firmware/dino-tamagotchi.hex"
+      "hex": "firmware/dino-tamagotchi.hex",
+      "screen": {
+        "title": "DINO PET",
+        "subtitle": "jakobdesign presents",
+        "mode": "dino"
+      }
     },
     {
       "id": "tamagotchi",
@@ -71,7 +111,12 @@
       "summary": "OLED virtual pet with menu and sprites.",
       "hardware": "Arduino UNO, SSD1306 OLED, buzzer",
       "source": "../My_arduino_tamagotchi-main/Code.ino",
-      "hex": "firmware/tamagotchi.hex"
+      "hex": "firmware/tamagotchi.hex",
+      "screen": {
+        "title": "ALEGOTCHI",
+        "subtitle": "Home screen",
+        "mode": "pet"
+      }
     },
     {
       "id": "gyro-racer",
@@ -79,7 +124,12 @@
       "summary": "Motion-controlled OLED racing game.",
       "hardware": "Arduino UNO, SSD1306 OLED, MPU6050",
       "source": "../GyroRacer-main/src/GyroRacer/GyroRacer.ino",
-      "hex": "firmware/gyro-racer.hex"
+      "hex": "firmware/gyro-racer.hex",
+      "screen": {
+        "title": "3 fast",
+        "subtitle": "laps...",
+        "mode": "racer"
+      }
     }
   ]
 }

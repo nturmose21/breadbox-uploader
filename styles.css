@@ -312,10 +312,14 @@ h3 {
 
 .sketch-button {
   width: 100%;
-  min-height: 76px;
+  min-height: 102px;
   border: 4px solid var(--ink);
   border-radius: 9px;
-  padding: 12px 14px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 116px;
+  gap: 12px;
+  align-items: center;
   background: #fffef7;
   color: var(--ink);
   text-align: left;
@@ -333,7 +337,11 @@ h3 {
   box-shadow: 1px 2px 0 var(--ink);
 }
 
-.sketch-button strong {
+.sketch-copy {
+  min-width: 0;
+}
+
+.sketch-copy strong {
   display: block;
   margin-bottom: 4px;
   font-size: 1rem;
@@ -342,7 +350,7 @@ h3 {
   text-transform: uppercase;
 }
 
-.sketch-button span {
+.sketch-copy span {
   display: block;
   color: #31323a;
   font-size: 0.92rem;
@@ -366,9 +374,22 @@ h3 {
   padding: 18px;
   border: 4px solid var(--ink);
   border-radius: 9px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 18px;
+  align-items: center;
   background:
     radial-gradient(circle at 100% 0%, rgba(25, 200, 194, 0.24) 0 84px, transparent 85px),
     linear-gradient(135deg, #fff 0%, #fff1bd 100%);
+}
+
+.selected-copy {
+  min-width: 0;
+}
+
+.selected-screen {
+  display: flex;
+  justify-content: end;
 }
 
 .selected p:last-child {
@@ -393,6 +414,204 @@ h3 {
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.oled-preview {
+  --oled-scale: 1;
+  width: calc(128px * var(--oled-scale));
+  height: calc(64px * var(--oled-scale));
+  display: block;
+  flex: 0 0 auto;
+  border: calc(4px * var(--oled-scale)) solid #05080a;
+  border-radius: calc(8px * var(--oled-scale));
+  padding: calc(5px * var(--oled-scale));
+  background: #11181b;
+  box-shadow:
+    inset 0 0 0 calc(2px * var(--oled-scale)) #30383d,
+    0 calc(3px * var(--oled-scale)) 0 #05080a;
+}
+
+.oled-preview--small {
+  --oled-scale: 0.82;
+}
+
+.oled-preview--large {
+  --oled-scale: 1.62;
+}
+
+.oled-glass {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  border-radius: calc(4px * var(--oled-scale));
+  background:
+    linear-gradient(rgba(90, 255, 250, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 255, 250, 0.04) 1px, transparent 1px),
+    #02090b;
+  background-size: calc(6px * var(--oled-scale)) calc(6px * var(--oled-scale));
+  color: #65fff8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-shadow: 0 0 calc(5px * var(--oled-scale)) rgba(101, 255, 248, 0.8);
+}
+
+.oled-scanline {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0 1px,
+    transparent 1px calc(4px * var(--oled-scale))
+  );
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.oled-title,
+.oled-subtitle,
+.oled-loader,
+.oled-art,
+.oled-art span {
+  position: absolute;
+  display: block;
+}
+
+.oled-title {
+  left: calc(8px * var(--oled-scale));
+  top: calc(10px * var(--oled-scale));
+  max-width: calc(112px * var(--oled-scale));
+  font-size: calc(12px * var(--oled-scale));
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.oled-subtitle {
+  left: calc(8px * var(--oled-scale));
+  bottom: calc(14px * var(--oled-scale));
+  max-width: calc(112px * var(--oled-scale));
+  font-size: calc(6.5px * var(--oled-scale));
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.oled-loader {
+  left: calc(8px * var(--oled-scale));
+  right: calc(8px * var(--oled-scale));
+  bottom: calc(5px * var(--oled-scale));
+  height: calc(4px * var(--oled-scale));
+  border: 1px solid currentColor;
+}
+
+.oled-loader span {
+  width: 58%;
+  height: 100%;
+  background: currentColor;
+}
+
+.oled-art {
+  right: calc(8px * var(--oled-scale));
+  top: calc(24px * var(--oled-scale));
+  width: calc(34px * var(--oled-scale));
+  height: calc(18px * var(--oled-scale));
+  opacity: 0.95;
+}
+
+.oled-art span {
+  background: currentColor;
+}
+
+.oled-art span:nth-child(1) {
+  left: 0;
+  bottom: 0;
+  width: calc(7px * var(--oled-scale));
+  height: calc(7px * var(--oled-scale));
+}
+
+.oled-art span:nth-child(2) {
+  left: calc(10px * var(--oled-scale));
+  bottom: 0;
+  width: calc(7px * var(--oled-scale));
+  height: calc(13px * var(--oled-scale));
+}
+
+.oled-art span:nth-child(3) {
+  left: calc(20px * var(--oled-scale));
+  bottom: 0;
+  width: calc(7px * var(--oled-scale));
+  height: calc(18px * var(--oled-scale));
+}
+
+.oled-art span:nth-child(4) {
+  right: 0;
+  bottom: 0;
+  width: calc(4px * var(--oled-scale));
+  height: calc(4px * var(--oled-scale));
+  border-radius: 999px;
+}
+
+.oled-preview--bird .oled-art span {
+  border-radius: 999px;
+}
+
+.oled-preview--bird .oled-art span:nth-child(1) {
+  width: calc(16px * var(--oled-scale));
+  height: calc(11px * var(--oled-scale));
+}
+
+.oled-preview--bird .oled-art span:nth-child(2) {
+  left: calc(13px * var(--oled-scale));
+  bottom: calc(4px * var(--oled-scale));
+  width: calc(13px * var(--oled-scale));
+  height: calc(6px * var(--oled-scale));
+}
+
+.oled-preview--doom .oled-art {
+  border-bottom: calc(10px * var(--oled-scale)) solid currentColor;
+  border-left: calc(8px * var(--oled-scale)) solid transparent;
+  border-right: calc(8px * var(--oled-scale)) solid transparent;
+  height: 0;
+  background: transparent;
+}
+
+.oled-preview--doom .oled-art span,
+.oled-preview--racer .oled-art span:nth-child(4) {
+  display: none;
+}
+
+.oled-preview--meter .oled-art span:nth-child(1) {
+  width: calc(32px * var(--oled-scale));
+  height: calc(2px * var(--oled-scale));
+  bottom: calc(5px * var(--oled-scale));
+}
+
+.oled-preview--meter .oled-art span:nth-child(2) {
+  width: calc(32px * var(--oled-scale));
+  height: calc(2px * var(--oled-scale));
+  bottom: calc(12px * var(--oled-scale));
+  left: 0;
+}
+
+.oled-preview--dino .oled-art span:nth-child(1),
+.oled-preview--pet .oled-art span:nth-child(1) {
+  width: calc(22px * var(--oled-scale));
+  height: calc(13px * var(--oled-scale));
+  border-radius: calc(8px * var(--oled-scale)) calc(8px * var(--oled-scale)) calc(3px * var(--oled-scale)) calc(3px * var(--oled-scale));
+}
+
+.oled-preview--dino .oled-art span:nth-child(2),
+.oled-preview--pet .oled-art span:nth-child(2) {
+  left: calc(22px * var(--oled-scale));
+  bottom: calc(7px * var(--oled-scale));
+  width: calc(8px * var(--oled-scale));
+  height: calc(6px * var(--oled-scale));
 }
 
 .primary,
@@ -635,6 +854,23 @@ body.is-uploading .progress-fill {
 
   .sketch-list {
     max-height: 360px;
+  }
+
+  .sketch-button {
+    grid-template-columns: minmax(0, 1fr) 102px;
+    gap: 10px;
+  }
+
+  .selected {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-screen {
+    justify-content: start;
+  }
+
+  .oled-preview--large {
+    --oled-scale: 1.42;
   }
 
   .selected,

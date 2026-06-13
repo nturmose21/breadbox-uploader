@@ -7,6 +7,7 @@ const els = {
   sketchList: document.querySelector("#sketch-list"),
   selectedName: document.querySelector("#selected-name"),
   selectedDetail: document.querySelector("#selected-detail"),
+  selectedScreen: document.querySelector("#selected-screen"),
   uploadButton: document.querySelector("#upload-button"),
   refreshButton: document.querySelector("#refresh-button"),
   hexFile: document.querySelector("#hex-file"),
@@ -88,9 +89,12 @@ function renderSketches() {
     button.type = "button";
     button.dataset.id = sketch.id;
     button.classList.toggle("active", sketch === selectedSketch);
-    button.innerHTML = `<strong></strong><span></span>`;
-    button.querySelector("strong").textContent = sketch.name;
-    button.querySelector("span").textContent = sketch.summary || sketch.hex;
+    const copy = document.createElement("span");
+    copy.className = "sketch-copy";
+    copy.innerHTML = `<strong></strong><span></span>`;
+    copy.querySelector("strong").textContent = sketch.name;
+    copy.querySelector("span").textContent = sketch.summary || sketch.hex;
+    button.append(copy, createOledPreview(sketch.screen, "small"));
     button.addEventListener("click", () => {
       selectedSketch = sketch;
       customHex = null;
@@ -107,6 +111,11 @@ function renderSelected() {
   if (customHex) {
     els.selectedName.textContent = customHex.name;
     els.selectedDetail.textContent = "Custom Intel HEX file";
+    renderSelectedScreen({
+      title: "CUSTOM HEX",
+      subtitle: "Ready to upload",
+      mode: "custom",
+    });
     els.uploadButton.disabled = isUploading || !("serial" in navigator);
     return;
   }
@@ -114,13 +123,43 @@ function renderSelected() {
   if (!selectedSketch) {
     els.selectedName.textContent = "No sketch selected";
     els.selectedDetail.textContent = "Choose a BREADBOX sketch.";
+    els.selectedScreen.textContent = "";
     els.uploadButton.disabled = true;
     return;
   }
 
   els.selectedName.textContent = selectedSketch.name;
   els.selectedDetail.textContent = selectedSketch.hardware || "Arduino UNO";
+  renderSelectedScreen(selectedSketch.screen);
   els.uploadButton.disabled = isUploading || !("serial" in navigator);
+}
+
+function renderSelectedScreen(screen) {
+  els.selectedScreen.textContent = "";
+  els.selectedScreen.append(createOledPreview(screen, "large"));
+}
+
+function createOledPreview(screen = {}, size = "small") {
+  const title = screen.title || "BREADBOX";
+  const subtitle = screen.subtitle || "Loading...";
+  const mode = screen.mode || "default";
+  const preview = document.createElement("span");
+  preview.className = `oled-preview oled-preview--${size} oled-preview--${mode}`;
+  preview.setAttribute("aria-label", `OLED loading screen: ${title}, ${subtitle}`);
+  preview.innerHTML = `
+    <span class="oled-glass">
+      <span class="oled-scanline"></span>
+      <span class="oled-art" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </span>
+      <span class="oled-title"></span>
+      <span class="oled-subtitle"></span>
+      <span class="oled-loader" aria-hidden="true"><span></span></span>
+    </span>
+  `;
+  preview.querySelector(".oled-title").textContent = title;
+  preview.querySelector(".oled-subtitle").textContent = subtitle;
+  return preview;
 }
 
 async function loadCustomHex(event) {
