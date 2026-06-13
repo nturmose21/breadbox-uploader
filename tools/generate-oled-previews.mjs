@@ -236,6 +236,30 @@ function frameFromBitmap(name, sourcePath, arrayName) {
   save(name, canvas);
 }
 
+function saveBitmapFrame(name, sourcePath, arrayName, width = 128, height = 64) {
+  const canvas = new Canvas(width, height);
+  canvas.drawBitmap(0, 0, parseArray(readSource(sourcePath), arrayName), width, height);
+  save(name, canvas);
+}
+
+function frameFlappyExtras() {
+  const source = readSource("Arduino-Games-main/Flappy-Bird/games_bitmaps.h");
+  const gameplay = new Canvas();
+  gameplay.drawText(2, 2, "SCORE:0");
+  gameplay.drawText(76, 2, "HI:0");
+  gameplay.drawBitmap(14, 27, parseArray(source, "epd_bitmap_Bird"), 18, 12);
+  gameplay.drawBitmap(86, -19, parseArray(source, "epd_bitmap_TOP_PIPE"), 22, 64);
+  gameplay.drawBitmap(86, 39, parseArray(source, "epd_bitmap_BOTTOM_PIPE"), 22, 64);
+  gameplay.drawBitmap(42, 36, parseArray(source, "epd_bitmap_start_flappy"), 50, 20);
+  save("flappy-bird-gameplay", gameplay);
+  saveBitmapFrame("flappy-bird-game-over", "Arduino-Games-main/Flappy-Bird/games_bitmaps.h", "epd_bitmap_Game_over_cover");
+}
+
+function frameTetrisExtras() {
+  saveBitmapFrame("tetris-playfield", "Arduino-Games-main/Tetris/games_bitmaps.h", "epd_bitmap_tetris_playfield");
+  saveBitmapFrame("tetris-game-over", "Arduino-Games-main/Tetris/games_bitmaps.h", "epd_bitmap_Game_over_cover");
+}
+
 function frameDino() {
   const source = readSource("Dino-Tamagotchi-main/Tamaguino_DINO.ino");
   const canvas = new Canvas();
@@ -243,6 +267,23 @@ function frameDino() {
   canvas.drawBitmap(15, 24, parseArray(source, "splash1"), 48, 26);
   canvas.drawBitmap(48, 24, parseArray(source, "splash2"), 80, 40);
   save("dino-tamagotchi", canvas);
+
+  const play = new Canvas();
+  play.drawBitmap(0, 7, parseArray(source, "mountains"), 128, 16);
+  play.drawBitmap(70, 5, parseArray(source, "cloud2"), 32, 5);
+  play.drawBitmap(4, 23, parseArray(source, "trees"), 112, 20);
+  play.drawBitmap(10, 26, parseArray(source, "dinoWalk0"), 48, 24);
+  for (let x = -8; x < 128; x += 8) play.drawBitmap(x, 50, parseArray(source, "grass"), 8, 6);
+  for (let x = 0; x < 128; x += 32) play.drawBitmap(x, 56, parseArray(source, "grass_front"), 32, 8);
+  play.drawText(0, 0, "LVL:1");
+  play.drawText(86, 0, "PTS:0");
+  save("dino-tamagotchi-play", play);
+
+  const over = new Canvas();
+  over.drawText(24, 18, "GAME", 2);
+  over.drawText(24, 36, "OVER", 2);
+  over.drawText(28, 56, "SCORE:0");
+  save("dino-tamagotchi-game-over", over);
 }
 
 function frameDoom() {
@@ -251,6 +292,29 @@ function frameDoom() {
   canvas.drawBitmap(28, 5, parseArray(source, "bmp_logo_bits"), 72, 47);
   drawDoomText(canvas, 39, 51, "PRESS FIRE", source);
   save("doom", canvas);
+
+  const gameplay = new Canvas();
+  drawDoomScene(gameplay, source, false);
+  save("doom-gameplay", gameplay);
+
+  const fire = new Canvas();
+  drawDoomScene(fire, source, true);
+  save("doom-fire", fire);
+}
+
+function drawDoomScene(canvas, source, firing) {
+  for (let x = 0; x < 128; x += 1) {
+    const wallTop = 8 + Math.floor(Math.abs(x - 64) / 5);
+    const wallBottom = 56 - Math.floor(Math.abs(x - 64) / 8);
+    if (x % 6 < 3) canvas.line(x, wallTop, x, wallBottom);
+  }
+  canvas.fillRect(0, 42, 128, 1);
+  canvas.fillRect(0, 50, 128, 1);
+  canvas.drawRect(54, 18, 20, 22);
+  canvas.drawBitmap(49, 31, parseArray(source, "bmp_imp_bits"), 16, 32);
+  if (firing) canvas.drawBitmap(55, 31, parseArray(source, "bmp_fire_bits"), 16, 16);
+  canvas.drawBitmap(48, 31, parseArray(source, "bmp_gun_bits"), 32, 32);
+  drawDoomText(canvas, 2, 58, "{} 100   [] 0", source);
 }
 
 function frameGyroRacer() {
@@ -300,6 +364,16 @@ function frameGyroRacer() {
   const playerX = 60 + Math.trunc(speed / 36);
   canvas.drawBitmap(playerX - 6, 44, sprite, 16, 16);
   save("gyro-racer", canvas);
+
+  const intro = new Canvas();
+  intro.drawText(0, 0, "3 FAST", 2);
+  intro.drawText(0, 18, "LAPS...", 2);
+  save("gyro-racer-intro", intro);
+
+  const finish = new Canvas();
+  finish.drawText(50, 20, "FIN", 2);
+  finish.drawText(0, 56, "IN 42 SECONDS");
+  save("gyro-racer-finish", finish);
 }
 
 function frameMultimeter() {
@@ -315,6 +389,28 @@ function frameMultimeter() {
   canvas.drawText(4, 54, "CNT>");
   canvas.drawText(64, 54, "NO");
   save("multimeter-oscilloscope", canvas);
+
+  const osc = new Canvas();
+  for (let y = 0; y < 64; y += 8) osc.line(0, y, 127, y);
+  for (let x = 0; x < 128; x += 16) osc.line(x, 0, x, 63);
+  for (let x = 1; x < 128; x += 1) {
+    const y1 = 32 + Math.round(Math.sin((x - 1) / 8) * 16);
+    const y2 = 32 + Math.round(Math.sin(x / 8) * 16);
+    osc.line(x - 1, y1, x, y2);
+  }
+  osc.clearRect(0, 0, 58, 8);
+  osc.drawText(0, 0, "OSC A3 LIVE");
+  save("multimeter-oscilloscope-osc", osc);
+
+  const gen = new Canvas();
+  for (let y = 20; y <= 44; y += 24) gen.line(0, y, 127, y);
+  for (let x = 0; x < 128; x += 18) {
+    gen.line(x, 20, x + 9, 20);
+    gen.line(x + 9, 20, x + 9, 44);
+    gen.line(x + 9, 44, x + 18, 44);
+  }
+  gen.drawText(0, 0, "GEN SQUARE");
+  save("multimeter-oscilloscope-square", gen);
 }
 
 function frameMiniPc() {
@@ -331,6 +427,54 @@ function frameMiniPc() {
   canvas.drawRoundRect(2, 32, 28, 28, 2);
   canvas.drawText(0, 120, "CALCULATOR");
   save("mini-pc", canvas);
+
+  const calc = new Canvas(64, 128);
+  calc.drawText(6, 4, "CALC");
+  calc.drawRect(8, 18, 48, 16);
+  calc.drawText(14, 23, "0");
+  const keys = [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["C", "0", "="]];
+  for (let r = 0; r < keys.length; r += 1) {
+    for (let c = 0; c < keys[r].length; c += 1) {
+      const x = 8 + c * 16;
+      const y = 44 + r * 18;
+      calc.drawRoundRect(x, y, 13, 14, 2);
+      calc.drawText(x + 4, y + 4, keys[r][c]);
+    }
+  }
+  save("mini-pc-calculator", calc);
+
+  const stop = new Canvas(64, 128);
+  stop.drawText(0, 0, "STOPWATCH");
+  stop.drawText(0, 20, "0", 2);
+  stop.drawText(24, 20, ":", 2);
+  stop.drawText(36, 20, "0", 2);
+  stop.drawText(6, 64, "000");
+  save("mini-pc-stopwatch", stop);
+}
+
+function frameCalculatorExtras() {
+  const source = readSource("Arduino-Uno-calculator--main/ardulator/Ardulator.ino");
+  const keypad = new Canvas(64, 128);
+  keypad.drawText(2, 10, "0");
+  const labels = [["7", "8", "9", "/"], ["4", "5", "6", "X"], ["1", "2", "3", "-"], ["C", "0", "=", "+"]];
+  for (let row = 0; row < 4; row += 1) {
+    for (let col = 0; col < 4; col += 1) {
+      const x = 2 + col * 15;
+      const y = 32 + row * 24;
+      keypad.drawBitmap(x, y, parseArray(source, row === 0 && col === 0 ? "epd_bitmap_SELECTED_CALC" : "epd_bitmap_BUTTON_CALC"), 14, 24);
+      keypad.drawText(x + 5, y + 8, labels[row][col]);
+    }
+  }
+  save("calculator-keypad", keypad);
+
+  const result = new Canvas(64, 128);
+  result.drawText(2, 8, "+");
+  result.drawText(2, 17, "12");
+  result.drawText(2, 26, "34");
+  result.drawText(2, 36, "46");
+  result.drawRect(0, 0, 63, 48);
+  result.drawText(7, 62, "READY");
+  save("calculator-result", result);
 }
 
 function drawTinyTetrisTitleFrame() {
@@ -413,15 +557,46 @@ function frameTamagotchi() {
   canvas.drawText(75, 53, "EAT");
   canvas.drawBitmap(56, 52, parseArray(sprites, "eat_icon"), 10, 10);
   save("tamagotchi", canvas);
+
+  const stats = new Canvas();
+  stats.drawText(0, 0, "ALEGOTCHI");
+  stats.drawRoundRect(4, 13, 120, 13, 2);
+  stats.drawText(9, 17, "HEALTH");
+  stats.fillRect(58, 17, 54, 5);
+  stats.drawRoundRect(4, 29, 120, 13, 2);
+  stats.drawText(9, 33, "SLEEP");
+  stats.fillRect(58, 33, 45, 5);
+  stats.drawRoundRect(4, 45, 120, 13, 2);
+  stats.drawText(9, 49, "FOOD");
+  stats.fillRect(58, 49, 60, 5);
+  save("tamagotchi-stats", stats);
+
+  const sleep = new Canvas();
+  sleep.drawBitmap(7, 18, parseArray(sprites, "myBitmapbody_01"), 32, 46);
+  sleep.drawBitmap(7, 18, parseArray(sprites, "feet_bg"), 32, 46, 0);
+  sleep.drawBitmap(7, 18, parseArray(sprites, "feet"), 32, 46);
+  sleep.drawBitmap(7, 18, parseArray(sprites, "head_bg"), 32, 46, 0);
+  sleep.drawBitmap(7, 18, parseArray(sprites, "head"), 32, 46);
+  sleep.drawBitmap(7, 18, parseArray(sprites, "eyes"), 32, 46, 0);
+  sleep.drawText(56, 15, "SLEEPING");
+  sleep.drawText(63, 31, "Z");
+  sleep.drawText(78, 23, "Z");
+  sleep.drawText(93, 15, "Z");
+  sleep.drawRoundRect(55, 45, 65, 13, 2);
+  sleep.drawText(61, 49, "WAKE");
+  save("tamagotchi-sleep", sleep);
 }
 
 mkdirSync(outDir, { recursive: true });
 frameFromBitmap("flappy-bird", "Arduino-Games-main/Flappy-Bird/games_bitmaps.h", "epd_bitmap_FLAPPY_BIRD_cover");
+frameFlappyExtras();
 frameFromBitmap("tetris", "Arduino-Games-main/Tetris/games_bitmaps.h", "epd_bitmap_TETRIS_cover");
+frameTetrisExtras();
 frameTinyTetris();
 frameDoom();
 frameMiniPc();
 frameFromBitmap("calculator", "Arduino-Uno-calculator--main/ardulator/Ardulator.ino", "epd_bitmap_Cover_screen");
+frameCalculatorExtras();
 frameMultimeter();
 frameDino();
 frameTamagotchi();

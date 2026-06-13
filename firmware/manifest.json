@@ -12,7 +12,21 @@
         "title": "FLAPPYBIRD",
         "subtitle": "PRESS TO START",
         "mode": "bird",
-        "image": "assets/oled/flappy-bird.svg"
+        "image": "assets/oled/flappy-bird.svg",
+        "frames": [
+          {
+            "label": "Boot",
+            "image": "assets/oled/flappy-bird.svg"
+          },
+          {
+            "label": "Gameplay",
+            "image": "assets/oled/flappy-bird-gameplay.svg"
+          },
+          {
+            "label": "Game over",
+            "image": "assets/oled/flappy-bird-game-over.svg"
+          }
+        ]
       }
     },
     {
@@ -26,7 +40,21 @@
         "title": "TETRIS",
         "subtitle": "Korobeiniki ready",
         "mode": "blocks",
-        "image": "assets/oled/tetris.svg"
+        "image": "assets/oled/tetris.svg",
+        "frames": [
+          {
+            "label": "Boot",
+            "image": "assets/oled/tetris.svg"
+          },
+          {
+            "label": "Playfield",
+            "image": "assets/oled/tetris-playfield.svg"
+          },
+          {
+            "label": "Game over",
+            "image": "assets/oled/tetris-game-over.svg"
+          }
+        ]
       }
     },
     {
@@ -71,7 +99,21 @@
         "title": "DOOM",
         "subtitle": "PRESS FIRE",
         "mode": "doom",
-        "image": "assets/oled/doom.svg"
+        "image": "assets/oled/doom.svg",
+        "frames": [
+          {
+            "label": "Boot",
+            "image": "assets/oled/doom.svg"
+          },
+          {
+            "label": "Gameplay",
+            "image": "assets/oled/doom-gameplay.svg"
+          },
+          {
+            "label": "Fire",
+            "image": "assets/oled/doom-fire.svg"
+          }
+        ]
       }
     },
     {
@@ -88,7 +130,21 @@
         "orientation": "portrait",
         "width": 64,
         "height": 128,
-        "image": "assets/oled/mini-pc.svg"
+        "image": "assets/oled/mini-pc.svg",
+        "frames": [
+          {
+            "label": "Menu",
+            "image": "assets/oled/mini-pc.svg"
+          },
+          {
+            "label": "Calculator",
+            "image": "assets/oled/mini-pc-calculator.svg"
+          },
+          {
+            "label": "Stopwatch",
+            "image": "assets/oled/mini-pc-stopwatch.svg"
+          }
+        ]
       }
     },
     {
@@ -102,7 +158,27 @@
         "title": "ARDULATOR",
         "subtitle": "Cover screen",
         "mode": "calc",
-        "image": "assets/oled/calculator.svg"
+        "image": "assets/oled/calculator.svg",
+        "frames": [
+          {
+            "label": "Boot",
+            "image": "assets/oled/calculator.svg"
+          },
+          {
+            "label": "Keypad",
+            "image": "assets/oled/calculator-keypad.svg",
+            "orientation": "portrait",
+            "width": 64,
+            "height": 128
+          },
+          {
+            "label": "Result",
+            "image": "assets/oled/calculator-result.svg",
+            "orientation": "portrait",
+            "width": 64,
+            "height": 128
+          }
+        ]
       }
     },
     {
@@ -116,7 +192,21 @@
         "title": "METER",
         "subtitle": "VOL RES CNT",
         "mode": "meter",
-        "image": "assets/oled/multimeter-oscilloscope.svg"
+        "image": "assets/oled/multimeter-oscilloscope.svg",
+        "frames": [
+          {
+            "label": "Meter",
+            "image": "assets/oled/multimeter-oscilloscope.svg"
+          },
+          {
+            "label": "Scope",
+            "image": "assets/oled/multimeter-oscilloscope-osc.svg"
+          },
+          {
+            "label": "Wave",
+            "image": "assets/oled/multimeter-oscilloscope-square.svg"
+          }
+        ]
       }
     },
     {
@@ -130,7 +220,21 @@
         "title": "DINO PET",
         "subtitle": "jakobdesign presents",
         "mode": "dino",
-        "image": "assets/oled/dino-tamagotchi.svg"
+        "image": "assets/oled/dino-tamagotchi.svg",
+        "frames": [
+          {
+            "label": "Boot",
+            "image": "assets/oled/dino-tamagotchi.svg"
+          },
+          {
+            "label": "Play",
+            "image": "assets/oled/dino-tamagotchi-play.svg"
+          },
+          {
+            "label": "Game over",
+            "image": "assets/oled/dino-tamagotchi-game-over.svg"
+          }
+        ]
       }
     },
     {
@@ -144,7 +248,21 @@
         "title": "ALEGOTCHI",
         "subtitle": "Home screen",
         "mode": "pet",
-        "image": "assets/oled/tamagotchi.svg"
+        "image": "assets/oled/tamagotchi.svg",
+        "frames": [
+          {
+            "label": "Home",
+            "image": "assets/oled/tamagotchi.svg"
+          },
+          {
+            "label": "Stats",
+            "image": "assets/oled/tamagotchi-stats.svg"
+          },
+          {
+            "label": "Sleep",
+            "image": "assets/oled/tamagotchi-sleep.svg"
+          }
+        ]
       }
     },
     {
@@ -158,7 +276,21 @@
         "title": "3 fast",
         "subtitle": "laps...",
         "mode": "racer",
-        "image": "assets/oled/gyro-racer.svg"
+        "image": "assets/oled/gyro-racer.svg",
+        "frames": [
+          {
+            "label": "Gameplay",
+            "image": "assets/oled/gyro-racer.svg"
+          },
+          {
+            "label": "Intro",
+            "image": "assets/oled/gyro-racer-intro.svg"
+          },
+          {
+            "label": "Finish",
+            "image": "assets/oled/gyro-racer-finish.svg"
+          }
+        ]
       }
     }
   ]
