@@ -11,7 +11,8 @@
       "screen": {
         "title": "FLAPPYBIRD",
         "subtitle": "PRESS TO START",
-        "mode": "bird"
+        "mode": "bird",
+        "image": "assets/oled/flappy-bird.svg"
       }
     },
     {
@@ -24,7 +25,8 @@
       "screen": {
         "title": "TETRIS",
         "subtitle": "Korobeiniki ready",
-        "mode": "blocks"
+        "mode": "blocks",
+        "image": "assets/oled/tetris.svg"
       }
     },
     {
@@ -37,7 +39,8 @@
       "screen": {
         "title": "TINY TETRIS",
         "subtitle": "Title screen",
-        "mode": "blocks"
+        "mode": "blocks",
+        "image": "assets/oled/tiny-tetris.svg"
       }
     },
     {
@@ -50,7 +53,8 @@
       "screen": {
         "title": "DOOM",
         "subtitle": "PRESS FIRE",
-        "mode": "doom"
+        "mode": "doom",
+        "image": "assets/oled/doom.svg"
       }
     },
     {
@@ -63,7 +67,8 @@
       "screen": {
         "title": "HACK_UPDT",
         "subtitle": "Calculator Menu",
-        "mode": "menu"
+        "mode": "menu",
+        "image": "assets/oled/mini-pc.svg"
       }
     },
     {
@@ -76,7 +81,8 @@
       "screen": {
         "title": "ARDULATOR",
         "subtitle": "Cover screen",
-        "mode": "calc"
+        "mode": "calc",
+        "image": "assets/oled/calculator.svg"
       }
     },
     {
@@ -89,7 +95,8 @@
       "screen": {
         "title": "METER",
         "subtitle": "VOL RES CNT",
-        "mode": "meter"
+        "mode": "meter",
+        "image": "assets/oled/multimeter-oscilloscope.svg"
       }
     },
     {
@@ -102,7 +109,8 @@
       "screen": {
         "title": "DINO PET",
         "subtitle": "jakobdesign presents",
-        "mode": "dino"
+        "mode": "dino",
+        "image": "assets/oled/dino-tamagotchi.svg"
       }
     },
     {
@@ -115,7 +123,8 @@
       "screen": {
         "title": "ALEGOTCHI",
         "subtitle": "Home screen",
-        "mode": "pet"
+        "mode": "pet",
+        "image": "assets/oled/tamagotchi.svg"
       }
     },
     {
@@ -128,7 +137,8 @@
       "screen": {
         "title": "3 fast",
         "subtitle": "laps...",
-        "mode": "racer"
+        "mode": "racer",
+        "image": "assets/oled/gyro-racer.svg"
       }
     }
   ]

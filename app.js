@@ -146,19 +146,29 @@ function createOledPreview(screen = {}, size = "small") {
   const preview = document.createElement("span");
   preview.className = `oled-preview oled-preview--${size} oled-preview--${mode}`;
   preview.setAttribute("aria-label", `OLED loading screen: ${title}, ${subtitle}`);
-  preview.innerHTML = `
-    <span class="oled-glass">
-      <span class="oled-scanline"></span>
-      <span class="oled-art" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </span>
-      <span class="oled-title"></span>
-      <span class="oled-subtitle"></span>
-      <span class="oled-loader" aria-hidden="true"><span></span></span>
-    </span>
-  `;
-  preview.querySelector(".oled-title").textContent = title;
-  preview.querySelector(".oled-subtitle").textContent = subtitle;
+
+  const glass = document.createElement("span");
+  glass.className = "oled-glass";
+
+  if (screen.image) {
+    const image = document.createElement("img");
+    image.className = "oled-image";
+    image.src = screen.image;
+    image.alt = `${title} OLED boot screen`;
+    image.width = 128;
+    image.height = 64;
+    glass.append(image);
+  } else {
+    const fallback = document.createElement("span");
+    fallback.className = "oled-fallback";
+    fallback.innerHTML = `<span></span><span></span><span></span>`;
+    fallback.querySelector("span:nth-child(1)").textContent = title;
+    fallback.querySelector("span:nth-child(2)").textContent = subtitle;
+    fallback.querySelector("span:nth-child(3)").textContent = "READY";
+    glass.append(fallback);
+  }
+
+  preview.append(glass);
   return preview;
 }
 
