@@ -334,11 +334,39 @@ function frameMiniPc() {
 }
 
 function frameTinyTetris() {
-  const source = readSource("arduino-Tiny-Tetris-main/Tiny_Tetris.ino");
-  const landscape = new Canvas();
-  drawTinyTetrisBlock(landscape, 50, 1, parseArray(source, "welcomeScreen"), 16, 5);
-  drawTinyTetrisBlock(landscape, 1, 0, parseArray(source, "tetrisLogo"), 40, 8);
-  save("tiny-tetris", rotateLandscapeToPortrait(landscape));
+  const canvas = new Canvas(64, 128);
+  const cell = (col, row) => {
+    const x = 2 + col * 5;
+    const y = 8 + (19 - row) * 6;
+    canvas.fillRect(x, y, 4, 5);
+  };
+
+  canvas.drawText(6, 0, "000000");
+  canvas.drawRect(0, 6, 53, 122);
+  canvas.fillRect(0, 126, 53, 2);
+  canvas.line(52, 6, 52, 127);
+
+  for (const [col, row] of [
+    [0, 0], [1, 0], [2, 0], [7, 0], [8, 0], [9, 0],
+    [0, 1], [4, 1], [5, 1], [8, 1], [9, 1],
+    [2, 2], [3, 2], [4, 2], [9, 2],
+  ]) {
+    cell(col, row);
+  }
+
+  for (const [col, row] of [[4, 10], [3, 11], [4, 11], [5, 11]]) {
+    cell(col, row);
+  }
+
+  canvas.drawText(55, 10, "N");
+  for (const [x, y] of [[56, 22], [56, 27], [56, 32], [56, 37]]) {
+    canvas.fillRect(x, y, 4, 4);
+  }
+  canvas.drawText(55, 54, "L");
+  canvas.drawText(55, 64, "V");
+  canvas.drawText(57, 74, "1");
+
+  save("tiny-tetris", canvas);
 }
 
 function frameTamagotchi() {
