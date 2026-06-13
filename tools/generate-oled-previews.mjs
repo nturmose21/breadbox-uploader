@@ -6,8 +6,8 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const sourceRoot = dirname(root);
 const outDir = join(root, "assets", "oled");
 
-const W = 128;
-const H = 64;
+const LANDSCAPE_W = 128;
+const LANDSCAPE_H = 64;
 
 const font = {
   " ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
@@ -59,18 +59,20 @@ const font = {
 };
 
 class Canvas {
-  constructor() {
-    this.pixels = new Uint8Array(W * H);
+  constructor(width = LANDSCAPE_W, height = LANDSCAPE_H) {
+    this.width = width;
+    this.height = height;
+    this.pixels = new Uint8Array(width * height);
   }
 
   set(x, y, value = 1) {
-    if (x >= 0 && x < W && y >= 0 && y < H) {
-      this.pixels[y * W + x] = value ? 1 : 0;
+    if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+      this.pixels[y * this.width + x] = value ? 1 : 0;
     }
   }
 
   get(x, y) {
-    return x >= 0 && x < W && y >= 0 && y < H ? this.pixels[y * W + x] : 0;
+    return x >= 0 && x < this.width && y >= 0 && y < this.height ? this.pixels[y * this.width + x] : 0;
   }
 
   fillRect(x, y, w, h, value = 1) {
@@ -199,19 +201,29 @@ function drawTinyTetrisBlock(canvas, xStart, pageStart, rows, rowCount, colCount
   }
 }
 
+function rotateLandscapeToPortrait(source) {
+  const portrait = new Canvas(source.height, source.width);
+  for (let y = 0; y < source.height; y += 1) {
+    for (let x = 0; x < source.width; x += 1) {
+      if (source.get(x, y)) portrait.set(y, source.width - 1 - x);
+    }
+  }
+  return portrait;
+}
+
 function save(name, canvas) {
   const rects = [];
-  for (let y = 0; y < H; y += 1) {
+  for (let y = 0; y < canvas.height; y += 1) {
     let x = 0;
-    while (x < W) {
-      while (x < W && !canvas.get(x, y)) x += 1;
+    while (x < canvas.width) {
+      while (x < canvas.width && !canvas.get(x, y)) x += 1;
       const start = x;
-      while (x < W && canvas.get(x, y)) x += 1;
+      while (x < canvas.width && canvas.get(x, y)) x += 1;
       if (x > start) rects.push(`<rect x="${start}" y="${y}" width="${x - start}" height="1"/>`);
     }
   }
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" shape-rendering="crispEdges">
-  <rect width="${W}" height="${H}" fill="#020406"/>
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas.width} ${canvas.height}" width="${canvas.width}" height="${canvas.height}" shape-rendering="crispEdges">
+  <rect width="${canvas.width}" height="${canvas.height}" fill="#020406"/>
   <g fill="#fff">${rects.join("")}</g>
 </svg>
 `;
@@ -242,9 +254,51 @@ function frameDoom() {
 }
 
 function frameGyroRacer() {
+  const source = readSource("GyroRacer-main/src/GyroRacer/GyroRacer.ino");
   const canvas = new Canvas();
-  canvas.drawText(0, 0, "3 FAST", 2);
-  canvas.drawText(0, 18, "LAPS...", 2);
+
+  canvas.drawText(0, 0, "LAP 1        085 KM/H");
+  for (const [x, y] of [[17, 16], [61, 20], [77, 15], [119, 19], [52, 10], [99, 13]]) {
+    canvas.set(x, y);
+  }
+
+  const sceneHeight = 32;
+  const speed = 96;
+  const distance = 1700;
+  const curve = 34;
+  for (let y = 0; y < sceneHeight; y += 1) {
+    const currentMiddle = 64 + Math.trunc(curve / (y + 1));
+    const streetWidth = ((90 * (y + 1)) >> 5) + 10;
+    const borderWidth = (10 * (y + 1)) >> 5;
+    const grassLeftWidth = currentMiddle - borderWidth - (streetWidth >> 1);
+    const grassRightBegin = currentMiddle + borderWidth + (streetWidth >> 1);
+    const grassRightWidth = 128 - grassRightBegin;
+    const screenY = y + sceneHeight;
+    const stripe = Math.sin(((((31 - y) * (31 - y) * (31 - y)) >> 5) + distance) * Math.PI / 64) > 0;
+
+    if (grassLeftWidth > 0) {
+      if (stripe) canvas.fillRect(0, screenY, grassLeftWidth, 1);
+      else for (let x = 0; x < grassLeftWidth; x += 1) if ((x + y) % 2) canvas.set(x, screenY);
+    }
+    if (grassRightWidth > 0) {
+      if (stripe) canvas.fillRect(grassRightBegin, screenY, grassRightWidth, 1);
+      else for (let x = grassRightBegin; x < grassRightBegin + grassRightWidth; x += 1) if ((x + y) % 2) canvas.set(x, screenY);
+    }
+
+    const borderLeftBegin = currentMiddle - borderWidth - (streetWidth >> 1);
+    const borderRightBegin = currentMiddle + (streetWidth >> 1);
+    if (Math.sin(((((31 - y) * (31 - y) * (31 - y)) >> 5) + distance) * Math.PI / 16) > 0) {
+      if (borderWidth > 0) {
+        canvas.fillRect(borderLeftBegin, screenY, borderWidth, 1);
+        canvas.fillRect(borderRightBegin, screenY, borderWidth, 1);
+      }
+    }
+  }
+
+  const sprites = parseArray(source, "g_whiteSprites");
+  const sprite = sprites.slice(32, 64);
+  const playerX = 60 + Math.trunc(speed / 36);
+  canvas.drawBitmap(playerX - 6, 44, sprite, 16, 16);
   save("gyro-racer", canvas);
 }
 
@@ -265,25 +319,26 @@ function frameMultimeter() {
 
 function frameMiniPc() {
   const source = readSource("Mini-PC-Arduino-main/menu.h");
-  const canvas = new Canvas();
+  const canvas = new Canvas(64, 128);
   canvas.drawBitmap(0, 0, parseArray(source, "epd_bitmap_logo"), 64, 30);
-  canvas.drawText(72, 6, "BEEP");
-  canvas.drawText(82, 16, "ON");
+  canvas.drawText(34, 94, "BEEP");
+  canvas.drawText(38, 104, "ON");
   canvas.drawBitmap(4, 34, parseArray(source, "myBitmapcalc"), 24, 24);
   canvas.drawBitmap(32, 34, parseArray(source, "myBitmapstop"), 24, 24);
-  canvas.drawBitmap(68, 34, parseArray(source, "myBitmapgam"), 24, 24);
-  canvas.drawBitmap(96, 34, parseArray(source, "myBitmapcalen"), 24, 24);
+  canvas.drawBitmap(4, 62, parseArray(source, "myBitmapgam"), 24, 24);
+  canvas.drawBitmap(32, 62, parseArray(source, "myBitmapcalen"), 24, 24);
+  canvas.drawBitmap(4, 90, parseArray(source, "myBitmapphone"), 24, 24);
   canvas.drawRoundRect(2, 32, 28, 28, 2);
-  canvas.drawText(34, 57, "CALCULATOR");
+  canvas.drawText(0, 120, "CALCULATOR");
   save("mini-pc", canvas);
 }
 
 function frameTinyTetris() {
   const source = readSource("arduino-Tiny-Tetris-main/Tiny_Tetris.ino");
-  const canvas = new Canvas();
-  drawTinyTetrisBlock(canvas, 50, 1, parseArray(source, "welcomeScreen"), 16, 5);
-  drawTinyTetrisBlock(canvas, 1, 0, parseArray(source, "tetrisLogo"), 40, 8);
-  save("tiny-tetris", canvas);
+  const landscape = new Canvas();
+  drawTinyTetrisBlock(landscape, 50, 1, parseArray(source, "welcomeScreen"), 16, 5);
+  drawTinyTetrisBlock(landscape, 1, 0, parseArray(source, "tetrisLogo"), 40, 8);
+  save("tiny-tetris", rotateLandscapeToPortrait(landscape));
 }
 
 function frameTamagotchi() {

@@ -40,6 +40,9 @@
         "title": "TINY TETRIS",
         "subtitle": "Title screen",
         "mode": "blocks",
+        "orientation": "portrait",
+        "width": 64,
+        "height": 128,
         "image": "assets/oled/tiny-tetris.svg"
       }
     },
@@ -68,6 +71,9 @@
         "title": "HACK_UPDT",
         "subtitle": "Calculator Menu",
         "mode": "menu",
+        "orientation": "portrait",
+        "width": 64,
+        "height": 128,
         "image": "assets/oled/mini-pc.svg"
       }
     },

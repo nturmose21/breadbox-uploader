@@ -143,8 +143,11 @@ function createOledPreview(screen = {}, size = "small") {
   const title = screen.title || "BREADBOX";
   const subtitle = screen.subtitle || "Loading...";
   const mode = screen.mode || "default";
+  const orientation = screen.orientation || "landscape";
+  const imageWidth = screen.width || (orientation === "portrait" ? 64 : 128);
+  const imageHeight = screen.height || (orientation === "portrait" ? 128 : 64);
   const preview = document.createElement("span");
-  preview.className = `oled-preview oled-preview--${size} oled-preview--${mode}`;
+  preview.className = `oled-preview oled-preview--${size} oled-preview--${mode} oled-preview--${orientation}`;
   preview.setAttribute("aria-label", `OLED loading screen: ${title}, ${subtitle}`);
 
   const glass = document.createElement("span");
@@ -155,8 +158,8 @@ function createOledPreview(screen = {}, size = "small") {
     image.className = "oled-image";
     image.src = screen.image;
     image.alt = `${title} OLED boot screen`;
-    image.width = 128;
-    image.height = 64;
+    image.width = imageWidth;
+    image.height = imageHeight;
     glass.append(image);
   } else {
     const fallback = document.createElement("span");
