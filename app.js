@@ -22,6 +22,7 @@ let sketches = [];
 let selectedSketch = null;
 let customHex = null;
 let isUploading = false;
+let selectedFrameIndex = 0;
 
 init();
 
@@ -97,6 +98,7 @@ function renderSketches() {
     button.append(copy, createOledPreview(sketch.screen, "small"));
     button.addEventListener("click", () => {
       selectedSketch = sketch;
+      selectedFrameIndex = 0;
       customHex = null;
       els.hexFile.value = "";
       renderSketches();
@@ -109,6 +111,7 @@ function renderSketches() {
 
 function renderSelected() {
   if (customHex) {
+    selectedFrameIndex = 0;
     els.selectedName.textContent = customHex.name;
     els.selectedDetail.textContent = "Custom Intel HEX file";
     renderSelectedScreen({
@@ -136,7 +139,44 @@ function renderSelected() {
 
 function renderSelectedScreen(screen) {
   els.selectedScreen.textContent = "";
-  els.selectedScreen.append(createOledPreview(screen, "large"));
+  const frames = getScreenFrames(screen);
+  selectedFrameIndex = Math.min(selectedFrameIndex, frames.length - 1);
+
+  const frameWrap = document.createElement("div");
+  frameWrap.className = "oled-frame-viewer";
+  const activeFrame = frames[selectedFrameIndex] || screen;
+  frameWrap.append(createOledPreview(activeFrame, "large"));
+
+  if (frames.length > 1) {
+    const rail = document.createElement("div");
+    rail.className = "oled-frame-rail";
+    rail.setAttribute("aria-label", "Project OLED screens");
+
+    frames.forEach((frame, index) => {
+      const button = document.createElement("button");
+      button.className = "oled-frame-button";
+      button.type = "button";
+      button.classList.toggle("active", index === selectedFrameIndex);
+      button.setAttribute("aria-label", frame.label || `Screen ${index + 1}`);
+      button.append(createOledPreview(frame, "thumb"));
+      button.addEventListener("click", () => {
+        selectedFrameIndex = index;
+        renderSelectedScreen(screen);
+      });
+      rail.append(button);
+    });
+
+    frameWrap.append(rail);
+  }
+
+  els.selectedScreen.append(frameWrap);
+}
+
+function getScreenFrames(screen = {}) {
+  if (Array.isArray(screen.frames) && screen.frames.length) {
+    return screen.frames.map((frame) => ({ ...screen, ...frame }));
+  }
+  return [screen];
 }
 
 function createOledPreview(screen = {}, size = "small") {

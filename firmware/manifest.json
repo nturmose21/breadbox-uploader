@@ -43,7 +43,21 @@
         "orientation": "portrait",
         "width": 64,
         "height": 128,
-        "image": "assets/oled/tiny-tetris.svg"
+        "image": "assets/oled/tiny-tetris.svg",
+        "frames": [
+          {
+            "label": "Boot final",
+            "image": "assets/oled/tiny-tetris.svg"
+          },
+          {
+            "label": "Title",
+            "image": "assets/oled/tiny-tetris-title.svg"
+          },
+          {
+            "label": "Gameplay",
+            "image": "assets/oled/tiny-tetris-gameplay.svg"
+          }
+        ]
       }
     },
     {

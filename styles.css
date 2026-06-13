@@ -390,6 +390,7 @@ h3 {
 .selected-screen {
   display: flex;
   justify-content: end;
+  min-width: 0;
 }
 
 .selected p:last-child {
@@ -438,6 +439,10 @@ h3 {
   --oled-scale: 1;
 }
 
+.oled-preview--thumb {
+  --oled-scale: 0.52;
+}
+
 .oled-preview--large {
   --oled-scale: 1.5;
 }
@@ -449,6 +454,48 @@ h3 {
 
 .oled-preview--portrait.oled-preview--large {
   --oled-scale: 1.25;
+}
+
+.oled-preview--portrait.oled-preview--thumb {
+  --oled-scale: 0.38;
+}
+
+.oled-frame-viewer {
+  min-width: 0;
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+}
+
+.oled-frame-rail {
+  width: min(230px, 100%);
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--teal-dark) transparent;
+  padding: 3px 2px 8px;
+}
+
+.oled-frame-button {
+  flex: 0 0 auto;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  padding: 4px;
+  background: #fffdf4;
+  box-shadow: 2px 3px 0 var(--ink);
+  scroll-snap-align: start;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.oled-frame-button:hover,
+.oled-frame-button:focus-visible,
+.oled-frame-button.active {
+  background: var(--yellow);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 2px 0 var(--ink);
 }
 
 .oled-glass {
